@@ -1,5 +1,5 @@
-let Canvas_Width = 576;
-let Canvas_Height = 324;
+let Canvas_Width =  768;
+let Canvas_Height = 432;
 
 let current_score = 0;
 
@@ -12,10 +12,8 @@ function setup() {
 }
 
 
-function draw() {
-    background(0, 0, 0);
-        
-    backgroundObject.display();
+function draw() {        
+    backgroundObject.run(frameCount);
     
     display_game_data();
     current_score++;
