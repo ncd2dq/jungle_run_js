@@ -82,14 +82,14 @@ function draw() {
     if(normal && background_sound.isPlaying() == false){
         powerup_sound_intro.stop();
         powerup_sound.stop();
-        background_sound.loop();
+        background_sound.play();
     } else if(!normal && powerupintro && powerup_sound_intro.isPlaying() == false){
         background_sound.stop();
         powerup_sound_intro.play();
         powerupintro = false;
     } else if(!normal && !powerupintro && powerup_sound_intro.isPlaying() == false && powerup_sound.isPlaying() == false){
         background_sound.stop();
-        powerup_sound.loop();
+        powerup_sound.play();
     }
     
     backgroundObject.run();
