@@ -13,16 +13,30 @@ let global_y_offset = 0;
 let background_sound;
 let coin_sound;
 let running_sound;
+let powerup_sound_intro;
+let powerup_sound;
+let powerupintro = true;
+
+// normal sounds
+let run_speed_sound = 1.09;
+let normal = true;
+// end normal sounds
+// power up stuff
+let run_speed_powerup = 2.5;
+// end power up
 
 function preload(){
     soundFormats('mp3');
     background_sound = loadSound("assets/soundtrack/background_nofade.mp3");
     background_sound.setVolume(0.6);
     running_sound = loadSound("assets/soundtrack/running_effect.mp3");
-    running_sound.setVolume(0.6);
-    running_sound.rate(1.09);
+    running_sound.setVolume(1);
+    running_sound.rate(run_speed_sound);
     coin_sound = loadSound("assets/soundtrack/coin_effect.mp3");
     coin_sound.setVolume(0.3);
+    //Power up stuff
+    powerup_sound_intro = loadSound("assets/soundtrack/powerup_with_intro.mp3");
+    powerup_sound = loadSound("assets/soundtrack/powerup_repeat.mp3");
 }
 
 function setup() {
@@ -62,6 +76,20 @@ function setup() {
 
 
 function draw() {
+    
+    if(normal && background_sound.isPlaying() == false){
+        powerup_sound_intro.stop();
+        powerup_sound.stop();
+        background_sound.loop();
+    } else if(!normal && powerupintro && powerup_sound_intro.isPlaying() == false){
+        background_sound.stop();
+        powerup_sound_intro.play();
+        powerupintro = false;
+    } else if(!normal && !powerupintro && powerup_sound_intro.isPlaying() == false && powerup_sound.isPlaying() == false){
+        background_sound.stop();
+        powerup_sound.loop();
+    }
+    
     backgroundObject.run();
     
     //test object loop
@@ -83,7 +111,11 @@ function draw() {
     heroObject.run(frameCount, obstacle_list);
 
     display_game_data();
- 
+    
+    //power up effect
+    if(!normal && frameCount % 5 == 0){
+        background(random(255), random(255), random(255), 255);
+    }
 }
 
 //Javascript HTML interface
@@ -114,6 +146,22 @@ function keyPressed(){
         heroObject.jump();
     } else if (keyCode == 80){ //the 'p' key
 
+    } else if(keyCode = 66){ //the 'b' key for powerup mode
+        if(normal){
+            normal = false;
+        } else {
+            normal = true;
+            powerupintro = true;
+        }
+    }
+}
+
+function powerup(){
+    if(normal){
+        normal = false;
+    } else {
+        normal = true;
+        powerupintro = true;
     }
 }
 

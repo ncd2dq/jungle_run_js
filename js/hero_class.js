@@ -4,6 +4,10 @@ class Hero{
         this.animation_max = 11;
         this.running_frame_change_every = 3;
         this.jumping_frame_change_every = 8;
+        //power up 
+        this.power_up_change_frame_every = 1;
+        this.dank_glass = loadImage('assets/hero/dankglass.png');
+        //end power up
         this.change_frame_every = this.running_frame_change_every;
         this.animation_list = this.create_running_array();
         
@@ -86,6 +90,20 @@ class Hero{
             }
     }
     
+    display_dank(){
+        if(!this.above_zone){
+            let current_image = this.animation_list[this.animation_index];
+            image(this.dank_glass, 
+                  this.x + (this.resized_x * 1 / 3 + 5), this.y + (this.resized_y * 1 / 4 + 2),
+                 35, 15); //resizes the image
+        } else {
+            let current_image = this.animation_list[this.animation_index];
+            image(this.dank_glass, 
+                  this.x + (this.resized_x * 1 / 3 + 5), this.fixed_y - this.fix_y_for_obstacles + (this.resized_y * 1 / 4 + 2),
+                 35, 15); //resizes the image
+        }
+    }
+    
     update(){
         //THIS IS WHERE THE MAGIC OF UNLIMITED UPWARD MOVEMENT COMES FROM
         
@@ -115,7 +133,11 @@ class Hero{
             this.y = this.y_standard;
             this.y_vel = 0;
             this.jump_count = 0;
-            this.change_frame_every = this.running_frame_change_every;
+            if(normal){ //if powerup is running go into frantic mode
+                this.change_frame_every = this.running_frame_change_every;
+            } else if (!normal){
+                this.change_frame_every = this.power_up_change_frame_every;
+            }
             if(running_sound.isPlaying() == false){
                 running_sound.play();
             }
@@ -123,7 +145,11 @@ class Hero{
             this.y = this.y_standard;
             this.y_vel = 0;
             this.jump_count = 0;
-            this.change_frame_every = this.running_frame_change_every;
+            if(normal){ //if powerup is running go into frantic mode
+                this.change_frame_every = this.running_frame_change_every;
+            } else if (!normal){
+                this.change_frame_every = this.power_up_change_frame_every;
+            }
             if(running_sound.isPlaying() == false){
                 running_sound.play();
             }
@@ -197,6 +223,9 @@ class Hero{
         this.update();
         this.choose_animation_index(frame);
         this.display();
+        if(!normal){
+            this.display_dank();
+        }
         this.stand_on(objs);
     }
     
