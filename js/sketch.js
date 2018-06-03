@@ -19,8 +19,11 @@ function setup() {
     let coin_speed = backgroundObject.speed * (1 + backgroundObject.speed_reduction);
     
     coin_list.push(new goldCoin(250, 0));
-    obstacle_list.push(new Obstacle(300, Canvas_Height - 200, 2));
-    obstacle_list.push(new Obstacle(400, Canvas_Height - 300, 2));
+    obstacle_list.push(new Obstacle(120, Canvas_Height - 200, 0));
+    obstacle_list.push(new Obstacle(120, Canvas_Height - 300, 0));
+    obstacle_list.push(new Obstacle(120, Canvas_Height - 400, 0));
+    obstacle_list.push(new Obstacle(120, Canvas_Height - 500, 0));
+    obstacle_list.push(new Obstacle(120, Canvas_Height - 600, 0));
 }
 
 

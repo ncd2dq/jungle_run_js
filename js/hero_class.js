@@ -33,6 +33,11 @@ class Hero{
         
         this.above_zone = false;
         this.fixed_y = Canvas_Height / 3 - (this.resized_y / 4);
+        this.fix_y_for_obstacles = 58;
+        
+        //new position when in above zone
+        //this.fixed_y and this.fixed_y + (this.resized_y * 5/ 6) - this.fix_y_for_obstacles
+        //everything else is the same
     }
     
     create_running_array(){
@@ -58,11 +63,13 @@ class Hero{
                this.x + this.resized_x / 3 <= objs[i].x - objs[i].image_blank_space + objs[i].resized_x &&
               this.y + this.resized_y * 5 / 6 <= objs[i].y + objs[i].image_blank_space){
                 this.possible_surfaces.push(objs[i].y_standard);
+
             } else if(this.x + this.resized_x * 1.75 / 3 >= objs[i].x + objs[i].image_blank_space &&
                this.x + this.resized_x * 1.75 / 3 <= objs[i].x - objs[i].image_blank_space + objs[i].resized_x &&
                 this.y + this.resized_y * 5 / 6 <= objs[i].y + objs[i].image_blank_space){
                 this.possible_surfaces.push(objs[i].y_standard);
             }
+
             
         }
         if(this.possible_surfaces.length == 0){
@@ -101,10 +108,15 @@ class Hero{
     }
     
     jump(){
-        if(this.jump_count < this.max_jumps){
+        if(this.jump_count < this.max_jumps && this.jump_count == 0){
             this.jump_count++;
             this.y -= this.jump_budge;
             this.y_vel += this.jump_vel;
+        } else if(this.jump_count == 1){
+            this.y_vel = 0;
+            this.y -= this.jump_budge * 1.5;
+            this.y_vel += this.jump_vel * 1.3;
+            this.jump_count++;
         }
         
     }
@@ -130,18 +142,26 @@ class Hero{
         } else {
             let current_image = this.animation_list[this.animation_index];
             image(current_image, 
-                  this.x, this.fixed_y,
+                  this.x, this.fixed_y - this.fix_y_for_obstacles,
                  this.resized_x, this.resized_y); //resizes the image
         }
         
         ellipse(this.x + 175/3, this.fixed_y, 5,5);
         
         //find hit box
-/*        fill(255, 0, 0);
-        ellipse(this.x + 175 / 3, this.y + this.resized_y * 5 / 6, 5, 5);
-        ellipse(this.x + 175 * 1.75 / 3, this.y + this.resized_y * 5 / 6, 5, 5);
-        ellipse(this.x + 175 / 3, this.y + this.resized_y * 1 / 3, 5, 5);
-        ellipse(this.x + 175 * 1.75 / 3, this.y + this.resized_y * 1 / 3, 5, 5);*/
+        fill(255,255,0);
+        if(this.above_zone){
+            ellipse(this.x + 175/3, this.fixed_y + (this.resized_y * 5/ 6) - this.fix_y_for_obstacles, 5, 5); // bottom left
+            ellipse(this.x + 175 * 1.75 / 3, this.fixed_y + (this.resized_y * 5/ 6) - this.fix_y_for_obstacles, 5, 5); //bottom right
+            ellipse(this.x + 175 / 3, this.fixed_y, 5, 5); // top left
+            ellipse(this.x + 175 * 1.75 / 3, this.fixed_y, 5, 5); //top right
+        } else if(!this.above_zone){
+            fill(255, 0, 0);
+            ellipse(this.x + 175 / 3, this.y + this.resized_y * 5 / 6, 5, 5); // bottom left
+            ellipse(this.x + 175 * 1.75 / 3, this.y + this.resized_y * 5 / 6, 5, 5); //bottom right
+            ellipse(this.x + 175 / 3, this.y + this.resized_y * 1 / 3, 5, 5); // top left
+            ellipse(this.x + 175 * 1.75 / 3, this.y + this.resized_y * 1 / 3, 5, 5); //top right
+        }
     }
     
     run(frame, objs){
