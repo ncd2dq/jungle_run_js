@@ -41,6 +41,7 @@ class backgroundParralax{
 
         this.speed = 4;
         this.speed_reduction = 0.5;
+        this.floor_bottom_speed = this.speed * (1 + this.speed_reduction);
     }
     
     loop_background_display(){

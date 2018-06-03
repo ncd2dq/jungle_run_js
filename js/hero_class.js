@@ -20,6 +20,7 @@ class Hero{
         
         this.y_vel = 0;
         this.gravity = 0.5;
+        this.max_downward = -12;
         this.jump_vel = 7;
         this.jump_budge = 15;
         
@@ -72,9 +73,9 @@ class Hero{
 
             
         }
-        if(this.possible_surfaces.length == 0){
+        if(this.possible_surfaces.length == 0){ // if he is above no other objects, change the floor back to the ground level
                 this.y_standard = backgroundObject.y_standard;
-            } else {
+            } else { //if he is above other objects, change the floor to the highest of the objects he is above
                 let highest = Canvas_Height;
                 for(let j = 0; j < this.possible_surfaces.length; j++){
                     if(this.possible_surfaces[j] < highest){
@@ -86,19 +87,31 @@ class Hero{
     }
     
     update(){
-        //moving all objects for jumping too high
-        if(this.y + this.resized_y * 1 / 3 <= this.fixed_y){
-            global_y_offset = this.fixed_y - (this.y + this.resized_y * 1 / 3) ;// - this.y_standard;
+        //THIS IS WHERE THE MAGIC OF UNLIMITED UPWARD MOVEMENT COMES FROM
+        
+        //If your y position would go higher than a set limit on the screen, create a global_y_offset of how much higher you are relative to that fixed
+        //y point. Now, instead of moving the character, move all other objects downward by that much to show relative motion
+        
+        let top_left_actual = this.y + this.resized_y * 1 / 3; // find real y position of hero
+        if(top_left_actual <= this.fixed_y){ //compare it to the fixed position on screen
+            global_y_offset = this.fixed_y - (top_left_actual); //find the difference to apply to all objects when drawn
             this.above_zone = true;
         } else {   
             global_y_offset = 0;
             this.above_zone = false;
         }
             
-        if(this.y < this.y_standard){
+        if(this.y - this.y_vel < this.y_standard){ //when above the current floor, allow him to keep falling
             this.y -= this.y_vel;
-            this.y_vel -= this.gravity;
+            if(this.y_vel > this.max_downward){
+                this.y_vel -= this.gravity;
+            }
             this.change_frame_every = this.jumping_frame_change_every;
+        } else if (this.y - this.y_vel > this.y_standard){
+            this.y = this.y_standard;
+            this.y_vel = 0;
+            this.jump_count = 0;
+            this.change_frame_every = this.running_frame_change_every;
         } else if (this.y >= this.y_standard){
             this.y = this.y_standard;
             this.y_vel = 0;
@@ -167,9 +180,8 @@ class Hero{
     run(frame, objs){
         this.choose_animation_index(frame);
         this.display();
-        this.stand_on(objs);
-        this.stand_on(objs);
         this.update();
+        this.stand_on(objs);
     }
     
 }

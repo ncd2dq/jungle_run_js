@@ -17,13 +17,19 @@ function setup() {
     heroObject = new Hero();
     
     let coin_speed = backgroundObject.speed * (1 + backgroundObject.speed_reduction);
-    
+    let temp_speed = backgroundObject.floor_bottom_speed;
     coin_list.push(new goldCoin(250, 0));
-    obstacle_list.push(new Obstacle(120, Canvas_Height - 200, 0));
-    obstacle_list.push(new Obstacle(120, Canvas_Height - 300, 0));
-    obstacle_list.push(new Obstacle(120, Canvas_Height - 400, 0));
-    obstacle_list.push(new Obstacle(120, Canvas_Height - 500, 0));
-    obstacle_list.push(new Obstacle(120, Canvas_Height - 600, 0));
+    obstacle_list.push(new Obstacle(120 + 150, Canvas_Height - 200, temp_speed));
+    obstacle_list.push(new Obstacle(220 + 150, Canvas_Height - 300, temp_speed));
+    obstacle_list.push(new Obstacle(320 + 150, Canvas_Height - 400, temp_speed));
+    obstacle_list.push(new Obstacle(420 + 150, Canvas_Height - 500, temp_speed));
+    obstacle_list.push(new Obstacle(520 + 150, Canvas_Height - 600, temp_speed));
+    
+    obstacle_list.push(new Obstacle(120 + 150 + 400, Canvas_Height - 200, temp_speed));
+    obstacle_list.push(new Obstacle(220 + 150 + 400, Canvas_Height - 300, temp_speed));
+    obstacle_list.push(new Obstacle(320 + 150 + 400, Canvas_Height - 400, temp_speed));
+    obstacle_list.push(new Obstacle(420 + 150 + 400, Canvas_Height - 500, temp_speed));
+    obstacle_list.push(new Obstacle(520 + 150 + 400, Canvas_Height - 600, temp_speed));
 }
 
 
