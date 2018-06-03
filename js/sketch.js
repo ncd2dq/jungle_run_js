@@ -10,6 +10,20 @@ let obstacle_list = [];
 
 let global_y_offset = 0;
 
+let background_sound;
+let coin_sound;
+let running_sound;
+
+function preload(){
+    soundFormats('mp3');
+    background_sound = loadSound("assets/soundtrack/background_nofade.mp3");
+    background_sound.setVolume(0.6);
+    running_sound = loadSound("assets/soundtrack/running_effect.mp3");
+    running_sound.setVolume(0.6);
+    coin_sound = loadSound("assets/soundtrack/coin_effect.mp3");
+    coin_sound.setVolume(0.3);
+}
+
 function setup() {
     let canvas = createCanvas(Canvas_Width, Canvas_Height);
     canvas.parent('sketch-holder');
@@ -30,6 +44,19 @@ function setup() {
     obstacle_list.push(new Obstacle(320 + 150 + 400, Canvas_Height - 400, temp_speed));
     obstacle_list.push(new Obstacle(420 + 150 + 400, Canvas_Height - 500, temp_speed));
     obstacle_list.push(new Obstacle(520 + 150 + 400, Canvas_Height - 600, temp_speed));
+    
+    if(background_sound.isLoaded() == true){
+        background_sound.loop();
+    }
+    
+    if(running_sound.isLoaded() == true){
+        console.log("running sound loaded");
+    }
+    
+    if(coin_sound.isLoaded() == true){
+        console.log('coin sound loaded');
+        coin_sound.play();
+    }
 }
 
 

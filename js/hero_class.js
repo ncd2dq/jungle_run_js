@@ -107,17 +107,33 @@ class Hero{
                 this.y_vel -= this.gravity;
             }
             this.change_frame_every = this.jumping_frame_change_every;
+            if(running_sound.isPlaying() == true){
+                running_sound.stop();
+            }
+            
         } else if (this.y - this.y_vel > this.y_standard){
             this.y = this.y_standard;
             this.y_vel = 0;
             this.jump_count = 0;
             this.change_frame_every = this.running_frame_change_every;
+            if(running_sound.isPlaying() == false){
+                running_sound.play();
+            }
         } else if (this.y >= this.y_standard){
             this.y = this.y_standard;
             this.y_vel = 0;
             this.jump_count = 0;
             this.change_frame_every = this.running_frame_change_every;
+            if(running_sound.isPlaying() == false){
+                running_sound.play();
+            }
+            
+        } else {
+            if(running_sound.isPlaying() == false){
+                running_sound.play();
+            }
         }
+        
     }
     
     jump(){
@@ -178,9 +194,9 @@ class Hero{
     }
     
     run(frame, objs){
+        this.update();
         this.choose_animation_index(frame);
         this.display();
-        this.update();
         this.stand_on(objs);
     }
     
