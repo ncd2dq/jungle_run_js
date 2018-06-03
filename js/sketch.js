@@ -15,7 +15,7 @@ function setup() {
 function draw() {
     background(0, 0, 0);
         
-    image(backgroundObject.b0, 0, 0);
+    backgroundObject.display();
     
     display_game_data();
     current_score++;
