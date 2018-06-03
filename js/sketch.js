@@ -20,6 +20,7 @@ function preload(){
     background_sound.setVolume(0.6);
     running_sound = loadSound("assets/soundtrack/running_effect.mp3");
     running_sound.setVolume(0.6);
+    running_sound.rate(1.09);
     coin_sound = loadSound("assets/soundtrack/coin_effect.mp3");
     coin_sound.setVolume(0.3);
 }
@@ -60,7 +61,7 @@ function setup() {
 }
 
 
-function draw() {        
+function draw() {
     backgroundObject.run();
     
     //test object loop
