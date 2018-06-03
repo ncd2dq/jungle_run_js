@@ -36,6 +36,8 @@ class backgroundParralax{
         this.floor_x3 = this.floor_length * 2;
         this.floor_x4 = this.floor_length * 3;
         this.floor_y = Canvas_Height - 65;
+        
+        this.y_standard = Canvas_Height - 190; //the floor_y_standard is the height at which the hero is standing on the floor
 
         this.speed = 4;
         this.speed_reduction = 0.5;
@@ -102,25 +104,25 @@ class backgroundParralax{
     
     display_floor(){
         image(this.grass, 
-              [this.floor_x],[this.floor_y],  //where to draw on canvas  
+              [this.floor_x],[this.floor_y + global_y_offset],  //where to draw on canvas  
               [8 * 39],[8 * 19],    //resizinig of image  
               [0],[180],    // subset image position
               [150],[100])
         
         image(this.grass, 
-              [this.floor_x2],[this.floor_y],  //where to draw on canvas  
+              [this.floor_x2],[this.floor_y + global_y_offset],  //where to draw on canvas  
               [8 * 39],[8 * 19],    //resizinig of image  
               [0],[180],    // subset image position
               [150],[100])
         
         image(this.grass, 
-              [this.floor_x3],[this.floor_y],  //where to draw on canvas  
+              [this.floor_x3],[this.floor_y + global_y_offset],  //where to draw on canvas  
               [8 * 39],[8 * 19],    //resizinig of image  
               [0],[180],    // subset image position within larger image
               [150],[100]) //no fucking idea what this shit is
         
         image(this.grass, 
-              [this.floor_x4],[this.floor_y],  //where to draw on canvas  
+              [this.floor_x4],[this.floor_y + global_y_offset],  //where to draw on canvas  
               [8 * 39],[8 * 19],    //resizinig of image  
               [0],[180],    // subset image position within larger image
               [150],[100]) //no fucking idea what this shit is
