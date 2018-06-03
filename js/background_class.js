@@ -40,7 +40,7 @@ class backgroundParralax{
         this.y_standard = Canvas_Height - 190; //the floor_y_standard is the height at which the hero is standing on the floor
 
         this.normal_speed = 4;
-        this.powerup_speed = 10;
+        this.powerup_speed = powerupspeed;
         this.speed = 4;
         
         this.speed_reduction = 0.5;
@@ -144,11 +144,14 @@ class backgroundParralax{
 
         image(this.b0, this.b0x2, 0, this.b0.width * this.image_resizing, this.b0.height * this.image_resizing);
         
+        if(!normal){
+            image(powerup_visual, 0, 0, Canvas_Width, Canvas_Height); 
+        }
         
         image(this.b1, this.b1x, 0, this.b1.width * this.image_resizing, this.b1.height * this.image_resizing);
         
         image(this.b1, this.b1x2, 0, this.b1.width * this.image_resizing, this.b1.height * this.image_resizing);
-        
+
         
         image(this.b2, this.b2x, 0, this.b2.width * this.image_resizing, this.b2.height * this.image_resizing);
         

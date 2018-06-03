@@ -23,6 +23,8 @@ let normal = true;
 // end normal sounds
 // power up stuff
 let run_speed_powerup = 2.5;
+let powerup_visual;
+let powerupspeed = 10;
 // end power up
 
 function preload(){
@@ -44,6 +46,7 @@ function setup() {
     canvas.parent('sketch-holder');
     backgroundObject = new backgroundParralax();
     heroObject = new Hero();
+    powerup_visual = loadImage('assets/powerup/harambe.jpg');
     
     let coin_speed = backgroundObject.speed * (1 + backgroundObject.speed_reduction);
     let temp_speed = backgroundObject.floor_bottom_speed;
@@ -76,7 +79,6 @@ function setup() {
 
 
 function draw() {
-    
     if(normal && background_sound.isPlaying() == false){
         powerup_sound_intro.stop();
         powerup_sound.stop();
@@ -107,15 +109,15 @@ function draw() {
     for(let i = 0; i < obstacle_list.length; i++){
         obstacle_list[i].run();
     }
+    if(!normal && frameCount % 5 == 0){
+        background(random(255), random(255), random(255), 255);
+    }
     
     heroObject.run(frameCount, obstacle_list);
 
     display_game_data();
     
     //power up effect
-    if(!normal && frameCount % 5 == 0){
-        background(random(255), random(255), random(255), 255);
-    }
 }
 
 //Javascript HTML interface

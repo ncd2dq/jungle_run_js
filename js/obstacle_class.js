@@ -15,7 +15,11 @@ class Obstacle{
     }
     
     update(){
-        this.x -= this.speed;
+        if(normal){
+            this.x -= this.speed;
+        } else {
+            this.x -= powerupspeed;
+        }
     }
     
     display(){
