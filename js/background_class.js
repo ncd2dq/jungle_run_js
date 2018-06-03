@@ -81,7 +81,7 @@ class backgroundParralax{
         }
     }
     
-    update(frame){
+    update(){
         this.b4x -= this.speed;
         this.b4x2 -= this.speed;
         
@@ -153,10 +153,10 @@ class backgroundParralax{
         image(this.b4, this.b4x2, 0, this.initial_width * this.image_resizing, this.b4.height * this.image_resizing);
     }
     
-    run(frame){
+    run(){
         this.display_parralax();
         this.display_floor();
-        this.update(frame);
+        this.update();
         this.loop_background_display();
         this.loop_floor_display();
     }

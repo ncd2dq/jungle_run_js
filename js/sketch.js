@@ -4,17 +4,20 @@ let Canvas_Height = 432;
 let current_score = 0;
 
 let backgroundObject;
+let heroObject;
 
 function setup() {
     let canvas = createCanvas(Canvas_Width, Canvas_Height);
     canvas.parent('sketch-holder');
     backgroundObject = new backgroundParralax();
+    heroObject = new Hero();
 }
 
 
 function draw() {        
-    backgroundObject.run(frameCount);
-    
+    backgroundObject.run();
+    heroObject.run(frameCount)
+
     display_game_data();
     current_score++;
  
@@ -45,7 +48,7 @@ function keyPressed(){
         ship.forward = false;
         
     } else if (keyCode == 32){ //the spacebar
-
+        heroObject.jump();
     } else if (keyCode == 80){ //the 'p' key
 
     }
