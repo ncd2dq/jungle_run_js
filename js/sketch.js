@@ -32,7 +32,7 @@ function preload(){
     background_sound = loadSound("assets/soundtrack/background_nofade.mp3");
     background_sound.setVolume(0.6);
     running_sound = loadSound("assets/soundtrack/running_effect.mp3");
-    running_sound.setVolume(1);
+    running_sound.setVolume(1.5);
     running_sound.rate(run_speed_sound);
     coin_sound = loadSound("assets/soundtrack/coin_effect.mp3");
     coin_sound.setVolume(0.3);
@@ -91,8 +91,11 @@ function draw() {
             powerupintro = false;
         } else if(!normal && !powerupintro && powerup_sound_intro.isPlaying() == false && powerup_sound.isPlaying() == false){
             powerup_sound.play();
+            console.log('repeat');
         }
-    } catch(err){
+    } 
+    
+    catch(err){
         console.log(err);
         powerup_sound_intro.stop();
         powerup_sound.stop();
@@ -155,7 +158,7 @@ function keyPressed(){
         heroObject.jump();
     } else if (keyCode == 80){ //the 'p' key
 
-    } else if(keyCode = 66){ //the 'b' key for powerup mode
+    } else if(keyCode == 66){ //the 'b' key for powerup mode
         if(normal){
             normal = false;
         } else {
