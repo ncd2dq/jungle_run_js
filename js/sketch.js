@@ -19,13 +19,21 @@ function setup() {
     let coin_speed = backgroundObject.speed * (1 + backgroundObject.speed_reduction);
     
     coin_list.push(new goldCoin(250, 0));
-    obstacle_list.push(new Obstacle(150, Canvas_Height - 200, 0));
-    obstacle_list.push(new Obstacle(450, Canvas_Height - 300, 1));
+    obstacle_list.push(new Obstacle(300, Canvas_Height - 200, 2));
+    obstacle_list.push(new Obstacle(400, Canvas_Height - 300, 2));
 }
 
 
 function draw() {        
     backgroundObject.run();
+    
+    //test object loop
+    for(let i = 0; i < obstacle_list.length; i++){
+        if(obstacle_list[i].x < 0){
+            obstacle_list[i].x = Canvas_Width;
+        }
+    }
+    //end test loop
     
     for(let i = 0; i < coin_list.length; i++){
         coin_list[i].run(frameCount);
@@ -72,6 +80,9 @@ function keyPressed(){
     }
 }
 
+function mousePressed(){
+    heroObject.jump();
+}
 
 //collect coins
 function collect_coins(hero_class, coins){
