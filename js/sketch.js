@@ -17,6 +17,8 @@ let powerup_sound_intro;
 let powerup_sound;
 let powerupintro = true;
 
+let generator;
+
 // normal sounds
 let run_speed_sound = 1.09;
 let normal = true;
@@ -48,21 +50,6 @@ function setup() {
     heroObject = new Hero();
     powerup_visual = loadImage('assets/powerup/harambe.jpg');
     
-    let coin_speed = backgroundObject.speed * (1 + backgroundObject.speed_reduction);
-    let temp_speed = backgroundObject.floor_bottom_speed;
-    coin_list.push(new goldCoin(250, 0));
-    obstacle_list.push(new Obstacle(120 + 150, Canvas_Height - 200, temp_speed));
-    obstacle_list.push(new Obstacle(220 + 150, Canvas_Height - 300, temp_speed));
-    obstacle_list.push(new Obstacle(320 + 150, Canvas_Height - 400, temp_speed));
-    obstacle_list.push(new Obstacle(420 + 150, Canvas_Height - 500, temp_speed));
-    obstacle_list.push(new Obstacle(520 + 150, Canvas_Height - 600, temp_speed));
-    
-    obstacle_list.push(new Obstacle(120 + 150 + 400, Canvas_Height - 200, temp_speed));
-    obstacle_list.push(new Obstacle(220 + 150 + 400, Canvas_Height - 300, temp_speed));
-    obstacle_list.push(new Obstacle(320 + 150 + 400, Canvas_Height - 400, temp_speed));
-    obstacle_list.push(new Obstacle(420 + 150 + 400, Canvas_Height - 500, temp_speed));
-    obstacle_list.push(new Obstacle(520 + 150 + 400, Canvas_Height - 600, temp_speed));
-    
     if(background_sound.isLoaded() == true){
         background_sound.loop();
     }
@@ -73,7 +60,10 @@ function setup() {
     
     if(coin_sound.isLoaded() == true){
         console.log('coin sound loaded');
-        coin_sound.play();
+    }
+    generator = new objectGenerator(0.6, 0.5, 5, 4, 2, 0.3);
+    for(let i = 0; i < 75; i++){
+        generator.run(obstacle_list, coin_list);
     }
 }
 
@@ -104,13 +94,6 @@ function draw() {
     
     backgroundObject.run();
     
-    //test object loop
-    for(let i = 0; i < obstacle_list.length; i++){
-        if(obstacle_list[i].x < 0){
-            obstacle_list[i].x = Canvas_Width;
-        }
-    }
-    //end test loop
     
     for(let i = 0; i < coin_list.length; i++){
         coin_list[i].run(frameCount);
@@ -123,7 +106,9 @@ function draw() {
         background(random(255), random(255), random(255), 255);
     }
     
-    heroObject.run(frameCount, obstacle_list);
+    heroObject.run(frameCount, obstacle_list, coin_list);
+    remove_coins(coin_list);
+    remove_barriers(obstacle_list);
 
     display_game_data();
     
@@ -182,11 +167,24 @@ function mousePressed(){
 }
 
 //collect coins
-function collect_coins(hero_class, coins){
-    for(let i = 0; i < coins.length; i++){
-        if(hero_class.x){
-            
+function remove_coins(coins){
+    for(let i = coins.length - 1; i >= 0; i--){
+        if(coins[i].collected){
+            coins.splice(i, 1);
+            coin_sound.play();
+            current_score++;
+        } else if (coins[i].x + coins[i].resized_x * 2 / 3 < -5){
+            coins.splice(i, 1);
         }
+    }
+}
+
+function remove_barriers(barriers){
+    for(let i = barriers.length - 1; i >= 0 ; i--){
+        if(barriers[i].x + barriers[i].width < 0){
+            barriers.splice(i, 1);
+        }
+        
     }
 }
 

@@ -12,7 +12,6 @@ class Hero{
         this.animation_list = this.create_running_array();
         
         
-        
 /*        this.x = 35;
         this.y = Canvas_Height - 190;*/
         
@@ -201,10 +200,10 @@ class Hero{
                  this.resized_x, this.resized_y); //resizes the image
         }
         
-        ellipse(this.x + 175/3, this.fixed_y, 5,5);
+/*        ellipse(this.x + 175/3, this.fixed_y, 5,5);*/
         
         //find hit box
-        fill(255,255,0);
+/*        fill(255,255,0);
         if(this.above_zone){
             ellipse(this.x + 175/3, this.fixed_y + (this.resized_y * 5/ 6) - this.fix_y_for_obstacles, 5, 5); // bottom left
             ellipse(this.x + 175 * 1.75 / 3, this.fixed_y + (this.resized_y * 5/ 6) - this.fix_y_for_obstacles, 5, 5); //bottom right
@@ -216,10 +215,50 @@ class Hero{
             ellipse(this.x + 175 * 1.75 / 3, this.y + this.resized_y * 5 / 6, 5, 5); //bottom right
             ellipse(this.x + 175 / 3, this.y + this.resized_y * 1 / 3, 5, 5); // top left
             ellipse(this.x + 175 * 1.75 / 3, this.y + this.resized_y * 1 / 3, 5, 5); //top right
-        }
+        }*/
     }
     
-    run(frame, objs){
+    collect_coins(coins_list){
+        for(let i = 0; i < coins_list.length; i++){
+            
+            //Establish coin vertices
+            let c_tr, c_br, c_bl, c_tl;
+            c_tr = [coins_list[i].x + coins_list[i].resized_x * 2 / 3, coins_list[i].y + coins_list[i].resized_y * 1 / 5 + global_y_offset];
+            c_br = [coins_list[i].x + coins_list[i].resized_x * 2 / 3, coins_list[i].y + coins_list[i].resized_y * 4 / 5 + global_y_offset];
+            c_bl = [coins_list[i].x + coins_list[i].resized_x / 3, coins_list[i].y + coins_list[i].resized_y * 4 / 5 + global_y_offset];
+            c_tl = [coins_list[i].x + coins_list[i].resized_x / 3, coins_list[i].y + coins_list[i].resized_y * 1 / 5 + global_y_offset];
+            
+            let c_verts = [c_tr, c_br, c_bl, c_tl];
+            //Establish hero vertices
+            let h_tr, h_br, h_bl, h_tl;
+            if(this.above_zone){
+                h_tr = [this.x + 175 * 1.75 / 3, this.fixed_y];
+                h_br = [this.x + 175 * 1.75 / 3, this.fixed_y + (this.resized_y * 5/ 6) - this.fix_y_for_obstacles];
+                h_bl = [this.x + 175/3, this.fixed_y + (this.resized_y * 5/ 6) - this.fix_y_for_obstacles];
+                h_tl = [this.x + 175 / 3, this.fixed_y];
+            } else {
+                h_tr = [this.x + 175 * 1.75 / 3, this.y + this.resized_y * 1 / 3];
+                h_br = [this.x + 175 * 1.75 / 3, this.y + this.resized_y * 5 / 6];
+                h_bl = [this.x + 175 / 3, this.y + this.resized_y * 5 / 6];
+                h_tl = [this.x + 175 / 3, this.y + this.resized_y * 1 / 3];   
+            }
+            
+            //check if inside
+            for(let j = 0; j < c_verts.length; j++){
+                if(c_verts[j][0] <= h_br[0] && c_verts[j][0] >= h_bl[0] &&
+                  c_verts[j][1] <= h_bl[1] && c_verts[j][1] >= h_tl[1]){
+                    coins_list[i].collected = true;
+                    break
+                }
+            }
+        }
+
+        
+        
+        
+    }
+    
+    run(frame, objs, coins_list){
         this.update();
         this.choose_animation_index(frame);
         this.display();
@@ -227,6 +266,7 @@ class Hero{
             this.display_dank();
         }
         this.stand_on(objs);
+        this.collect_coins(coins_list);
     }
     
 }

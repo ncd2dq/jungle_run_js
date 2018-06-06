@@ -1,5 +1,5 @@
 class goldCoin{
-    constructor(x, speed){
+    constructor(x, y, speed){
         
         this.animation_index = 0;
         this.animation_max = 5;
@@ -7,10 +7,12 @@ class goldCoin{
         this.animation_list = this.create_coin_array();
         
         this.x = x;
-        this.y = Canvas_Height - 100;
+        this.y = y;
         
         this.resized_x = 50;
         this.resized_y = 50;
+        
+        this.collected = false;
         
         this.speed = speed;
     }
@@ -46,12 +48,12 @@ class goldCoin{
               this.x, this.y + global_y_offset,
              this.resized_x, this.resized_y);
 
-        //find hit box
+/*        //find hit box
         fill(255, 0, 0);
-        ellipse(this.x + this.resized_x / 3, this.y + this.resized_y * 4 / 5, 5, 5);
-        ellipse(this.x + this.resized_x * 2 / 3, this.y + this.resized_y * 4 / 5, 5, 5);
-        ellipse(this.x + this.resized_x / 3, this.y + this.resized_y * 1 / 5, 5, 5);
-        ellipse(this.x + this.resized_x * 2 / 3, this.y + this.resized_y * 1 / 5, 5, 5);
+        ellipse(this.x + this.resized_x / 3, global_y_offset + this.y + this.resized_y * 4 / 5, 5, 5);
+        ellipse(this.x + this.resized_x * 2 / 3, global_y_offset + this.y + this.resized_y * 4 / 5, 5, 5);
+        ellipse(this.x + this.resized_x / 3, global_y_offset + this.y + this.resized_y * 1 / 5, 5, 5);
+        ellipse(this.x + this.resized_x * 2 / 3, global_y_offset + this.y + this.resized_y * 1 / 5, 5, 5);*/
     }
     
     run(frame){
