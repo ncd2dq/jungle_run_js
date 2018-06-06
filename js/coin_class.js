@@ -15,6 +15,7 @@ class goldCoin{
         this.collected = false;
         
         this.speed = speed;
+        this.powerupspeed = powerupspeed;
     }
     
     create_coin_array(){
@@ -40,7 +41,11 @@ class goldCoin{
     }
     
     update(){
-        this.x -= this.speed;
+        if(normal){
+            this.x -= this.speed;
+        } else {
+            this.x -= this.powerupspeed;
+        }
     }
     
     display(){
