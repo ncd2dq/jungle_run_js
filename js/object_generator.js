@@ -1,5 +1,5 @@
 class objectGenerator{
-    constructor(coin_rate, obstacle_rate, max_levels, max_consecutive, max_skip, skip_rate){
+    constructor(coin_rate, evil_coin_rate, obstacle_rate, max_levels, max_consecutive, max_skip, skip_rate){
         this.coin_rate = coin_rate;
         this.obstacle_rate = obstacle_rate;
         this.skip_rate = skip_rate;
@@ -7,6 +7,7 @@ class objectGenerator{
         this.max_levels = max_levels;
         this.max_consecutive = max_consecutive;
         this.max_skip = max_skip;
+        this.evil_coin_rate = evil_coin_rate;
         
         this.current_block_num = 0;
         this.current_level = 0;
@@ -37,15 +38,35 @@ class objectGenerator{
         }
         
         for(let i = 0; i < amount_in_row; i++){
-            //push an obstacle
-            current_obstacle_list.push(new Obstacle(this.current_block_num * this.width, 290 - (this.length * this.current_level), 5))
+            //push an obstacle unless ground floor
+            let coin_y;
+            if(this.current_level != 0){
+                current_obstacle_list.push(new Obstacle(this.current_block_num * this.width, 290 - (this.length * this.current_level), ground_floor_speed));
+                coin_y = 290 - (this.length * this.current_level) - this.coin_min_y;
+            } else {
+                coin_y = Canvas_Height - 109;
+            }
             this.current_block_num++;
             
             //push a coin
             if(random() < this.coin_rate){
-                current_coins_list.push(new goldCoin(this.current_block_num * this.width - this.coin_min_x, 290 - (this.length * this.current_level) - this.coin_min_y, 5))
+                if(random() < this.evil_coin_rate && amount_in_row > 1){
+                    current_coins_list.push(new goldCoin(this.current_block_num * this.width - this.coin_min_x, coin_y, ground_floor_speed, true));
+                } else {
+                    current_coins_list.push(new goldCoin(this.current_block_num * this.width - this.coin_min_x, coin_y, ground_floor_speed, false));
+                }
+            }
+            
+            //add coins less often to bottom floor
+            if(random() < this.coin_rate / 2 && this.current_level > 2){
+                if(random() < this.evil_coin_rate * 2){
+                    current_coins_list.push(new goldCoin(this.current_block_num * this.width - this.coin_min_x, Canvas_Height - 109, ground_floor_speed, true));
+                } else {
+                    current_coins_list.push(new goldCoin(this.current_block_num * this.width - this.coin_min_x, Canvas_Height - 109, ground_floor_speed, false));
+                }
             }
         }
+        this.current_block_num++; //adds a space after every grouping
         
         //move object creator up, down, or stay the same
         if(up_or_down == -1 && this.current_level != 0){
@@ -53,10 +74,6 @@ class objectGenerator{
         } else if (up_or_down == 1 && this.current_level < this.max_levels){
             this.current_level++;
         }
-        
-    }
-    
-    create_gold_coin(current_coins_list){
         
     }
     

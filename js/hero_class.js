@@ -24,8 +24,8 @@ class Hero{
         this.y_vel = 0;
         this.gravity = 0.5;
         this.max_downward = -12;
-        this.jump_vel = 7;
-        this.jump_budge = 15;
+        this.jump_vel = 8;
+        this.jump_budge = 16;
         
         this.jump_count = 0;
         this.max_jumps = 2;
@@ -38,6 +38,9 @@ class Hero{
         this.above_zone = false;
         this.fixed_y = Canvas_Height / 3 - (this.resized_y / 4);
         this.fix_y_for_obstacles = 58;
+        
+        this.was_high_enough = false;
+        this.max_speed_reached = false;
         
         //new position when in above zone
         //this.fixed_y and this.fixed_y + (this.resized_y * 5/ 6) - this.fix_y_for_obstacles
@@ -253,9 +256,44 @@ class Hero{
             }
         }
 
+    }
+    
+    high_enough_to_die(){
+/*        if(this.above_zone && global_y_offset >= 86){
+            this.ready_to_die = true;
+            console.log(global_y_offset, this.y_vel);
+        }*/
+
+        //y_vel is at terminal velocity
+        //he went from was high enough
+        //the next time he got to y_vel = 0 he was on ground floor
         
+        //groundfloor = level 0
+        //if you were on level 2 or higher, if the next time your y_vel = 0, you are on the ground floor, it means you fell from that level and are dead
+        //when you this.y_vel == 0 it resets the falling_fast_enough and 
+        if(this.above_zone && global_y_offset >= 210){
+            this.was_high_enough = true;
+        }
         
+        if(this.y_vel <= this.max_downward){
+            this.max_speed_reached = true;
+        }
         
+        if(this.was_high_enough){
+            console.log(global_y_offset);
+        }
+        
+        if(this.y_vel == 0){
+            if(this.y == 242 && this.max_speed_reached && this.was_high_enough){ //ground level
+                hero_health = 0;
+                gState.game_over = true;
+                gState.fell = true;
+                console.log('You fell to your death');
+            } else {
+                this.was_high_enough = false;
+                this.max_speed_reached = false;
+            }
+        }
     }
     
     run(frame, objs, coins_list){
@@ -267,6 +305,7 @@ class Hero{
         }
         this.stand_on(objs);
         this.collect_coins(coins_list);
+        this.high_enough_to_die();
     }
     
 }

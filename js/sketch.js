@@ -17,6 +17,12 @@ let powerup_sound_intro;
 let powerup_sound;
 let powerupintro = true;
 
+let hero_max_health = 5;
+let hero_health = 5;
+let health_bar_scale = 50;
+
+let ground_floor_speed;
+
 let generator;
 
 // normal sounds
@@ -28,6 +34,7 @@ let run_speed_powerup = 2.5;
 let powerup_visual;
 let powerupspeed = 10;
 // end power up
+let gState;
 
 function preload(){
     soundFormats('mp3');
@@ -47,8 +54,10 @@ function setup() {
     let canvas = createCanvas(Canvas_Width, Canvas_Height);
     canvas.parent('sketch-holder');
     backgroundObject = new backgroundParralax();
+    ground_floor_speed = backgroundObject.floor_bottom_speed;
     heroObject = new Hero();
     powerup_visual = loadImage('assets/powerup/harambe.jpg');
+    gState = new gameState();
     
     if(background_sound.isLoaded() == true){
         background_sound.loop();
@@ -61,7 +70,13 @@ function setup() {
     if(coin_sound.isLoaded() == true){
         console.log('coin sound loaded');
     }
-    generator = new objectGenerator(0.6, 0.5, 5, 4, 2, 0.3);
+    generator = new objectGenerator(0.5, //coin rate
+                                    0.2, //evil coin rate
+                                    0.6, //obstacle_rate
+                                    6, //max levels
+                                    4, //max consecutive boxes
+                                    2, //max skips
+                                    0.3); //skip rate
     for(let i = 0; i < 75; i++){
         generator.run(obstacle_list, coin_list);
     }
@@ -111,6 +126,12 @@ function draw() {
     remove_barriers(obstacle_list);
 
     display_game_data();
+    display_health();
+    if(gState.paused){
+        gState.display_instructions();
+    } else if (gState.game_over){
+        gState.final_score_screen();
+    }
     
     //power up effect
 }
@@ -170,9 +191,16 @@ function mousePressed(){
 function remove_coins(coins){
     for(let i = coins.length - 1; i >= 0; i--){
         if(coins[i].collected){
+            if(!coins[i].evil){
+                current_score++;
+            } else {
+                hero_health--;
+                if(hero_health == 0){
+                    gState.game_over = true;
+                }
+            }
             coins.splice(i, 1);
             coin_sound.play();
-            current_score++;
         } else if (coins[i].x + coins[i].resized_x * 2 / 3 < -5){
             coins.splice(i, 1);
         }
@@ -188,17 +216,13 @@ function remove_barriers(barriers){
     }
 }
 
-//
-//        //find hit box
-//        fill(255, 0, 0);
-//        ellipse(this.x + 175 / 3, this.y + this.resized_y * 4 / 5, 5, 5);
-//        ellipse(this.x + 175 * 1.75 / 3, this.y + this.resized_y * 4 / 5, 5, 5);
-//        ellipse(this.x + 175 / 3, this.y + this.resized_y * 1 / 3, 5, 5);
-//        ellipse(this.x + 175 * 1.75 / 3, this.y + this.resized_y * 1 / 3, 5, 5);
-//
-//        //find hit box
-//        fill(255, 0, 0);
-//        ellipse(this.x + this.resized_x / 3, this.y + this.resized_y * 4 / 5, 5, 5);
-//        ellipse(this.x + this.resized_x * 1.75 / 3, this.y + this.resized_y * 4 / 5, 5, 5);
-//        ellipse(this.x + this.resized_x / 3, this.y + this.resized_y * 1 / 3, 5, 5);
-//        ellipse(this.x + this.resized_x * 1.75 / 3, this.y + this.resized_y * 1 / 3, 5, 5);
+function display_health(){
+    fill(0, 0, 0);
+    rect(Canvas_Width / 3, 5, hero_max_health * health_bar_scale, 10);
+    fill(0, 255, 0);
+    rect(Canvas_Width / 3, 5, hero_health * health_bar_scale, 10);
+}
+
+function pause_game(){
+    gState.pause();
+}
