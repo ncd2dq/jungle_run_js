@@ -21,7 +21,7 @@ class Obstacle{
         if(normal){
             this.x -= this.speed;
         } else {
-            this.x -= powerupspeed;
+            this.x -= powerupspeed * (1 + 0.5);
         }
     }
     

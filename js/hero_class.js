@@ -279,9 +279,6 @@ class Hero{
             this.max_speed_reached = true;
         }
         
-        if(this.was_high_enough){
-            console.log(global_y_offset);
-        }
         
         if(this.y_vel == 0){
             if(this.y == 242 && this.max_speed_reached && this.was_high_enough){ //ground level

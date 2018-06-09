@@ -36,6 +36,8 @@ let powerupspeed = 10;
 // end power up
 let gState;
 
+let course_length = 15;
+
 function preload(){
     soundFormats('mp3');
     background_sound = loadSound("assets/soundtrack/background_nofade.mp3");
@@ -76,10 +78,12 @@ function setup() {
                                     6, //max levels
                                     4, //max consecutive boxes
                                     2, //max skips
-                                    0.3); //skip rate
-    for(let i = 0; i < 35; i++){
+                                    0.3, //skip rate
+                                   [0.3, 0.2, 0.5]); //elevation down, same, up rate
+    for(let i = 0; i < course_length; i++){
         generator.run(obstacle_list, coin_list);
     }
+    generator.finish_generation(obstacle_list);
 }
 
 

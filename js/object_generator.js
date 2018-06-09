@@ -1,8 +1,9 @@
 class objectGenerator{
-    constructor(coin_rate, evil_coin_rate, obstacle_rate, max_levels, max_consecutive, max_skip, skip_rate){
+    constructor(coin_rate, evil_coin_rate, obstacle_rate, max_levels, max_consecutive, max_skip, skip_rate, elevation_rate){
         this.coin_rate = coin_rate;
         this.obstacle_rate = obstacle_rate;
         this.skip_rate = skip_rate;
+        this.elevation_rate = elevation_rate;
         
         this.max_levels = max_levels;
         this.max_consecutive = max_consecutive;
@@ -28,7 +29,16 @@ class objectGenerator{
         let amount_skipping = Math.round(random(0, this.max_skip));
         
         let amount_in_row = Math.round(random(1, this.max_consecutive));
-        let up_or_down = Math.round(random(-1, 1)); //-1 down, 0 same, 1 up
+        
+        
+        let up_or_down = random();
+        if(up_or_down < this.elevation_rate[0]){
+            up_or_down = -1;
+        } else if(up_or_down >= this.elevation_rate[0] && up_or_down <= (this.elevation_rate[0] + this.elevation_rate[1])){
+            up_or_down = 0;
+        } else{
+            up_or_down = 1;
+        }
         
         //create skip blocks
         if(skipping < this.skip_rate){
@@ -79,6 +89,15 @@ class objectGenerator{
     
     run(current_obstacle_list, current_coin_list){
         this.create_obstacle(current_obstacle_list, current_coin_list);
+    }
+    
+    finish_generation(current_obstacle_list){
+        while(this.current_level > 0){
+            current_obstacle_list.push(new Obstacle(this.current_block_num * this.width, 290 - (this.length * this.current_level), ground_floor_speed));
+            this.current_block_num += 2;
+            this.current_level--;
+            
+        }
     }
     
     

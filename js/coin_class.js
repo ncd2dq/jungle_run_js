@@ -63,7 +63,7 @@ class goldCoin{
         if(normal){
             this.x -= this.speed;
         } else {
-            this.x -= this.powerupspeed;
+            this.x -= this.powerupspeed * (1 + 0.5);
         }
     }
     

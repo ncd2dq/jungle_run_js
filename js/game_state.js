@@ -29,17 +29,18 @@ class gameState{
     }
     
     reset(){
-        normal = true;
         generator = new objectGenerator(0.5, //coin rate
-                                        0.2, //evil coin rate
-                                        0.6, //obstacle_rate
-                                        6, //max levels
-                                        4, //max consecutive boxes
-                                        2, //max skips
-                                        0.3); //skip rate
-        for(let i = 0; i < 35; i++){
+                                    0.2, //evil coin rate
+                                    0.6, //obstacle_rate
+                                    6, //max levels
+                                    4, //max consecutive boxes
+                                    2, //max skips
+                                    0.3, //skip rate
+                                   [0.3, 0.2, 0.5]); //elevation down, same, up rate
+        for(let i = 0; i < course_length; i++){
             generator.run(obstacle_list, coin_list);
         }
+        generator.finish_generation(obstacle_list);
         
         hero_health = 5;
 
@@ -48,17 +49,32 @@ class gameState{
     }
     
     reset_game(){
-        if(this.remaining_coins == 0){
+        if(obstacle_list.length == 0 && coin_list.length == 0){
             noLoop();
+            normal = true;
+            powerupintro = true;
+            this.level++;
+            try{
+                running_sound.stop();
+                powerup_sound_intro.stop();
+                powerup_sound.stop();
+                if(background_sound.isPlaying() == false){
+                    background_sound.loop();
+                }
+            }
+            catch(err){
+                console.log(err);
+            }
+            
+            
             setTimeout(this.reset, 3000)
-            running_sound.stop();
             background(0, 0, 0, 175);
             textSize(15);
             fill(0, 255, 0);
             text("Next Level!", Canvas_Width / 3 - 75, Canvas_Height / 2 - 70);
         }
     }
-    
+
     display_instructions(){
         background(0, 0, 0, 175);
         textSize(15);
@@ -71,6 +87,7 @@ class gameState{
     }
     
     final_score_screen(){
+        running_sound.stop();
         noLoop();
         this.game_over = true;
         background(0, 0, 0, 175);
