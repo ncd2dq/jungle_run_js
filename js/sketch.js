@@ -77,7 +77,7 @@ function setup() {
                                     4, //max consecutive boxes
                                     2, //max skips
                                     0.3); //skip rate
-    for(let i = 0; i < 75; i++){
+    for(let i = 0; i < 35; i++){
         generator.run(obstacle_list, coin_list);
     }
 }
@@ -132,6 +132,10 @@ function draw() {
     } else if (gState.game_over){
         gState.final_score_screen();
     }
+    
+    gState.remaining_coins = coin_list.length;
+    gState.display_level_stats();
+    gState.reset_game();
     
     //power up effect
 }

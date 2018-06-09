@@ -9,7 +9,7 @@ class objectGenerator{
         this.max_skip = max_skip;
         this.evil_coin_rate = evil_coin_rate;
         
-        this.current_block_num = 0;
+        this.current_block_num = 5;
         this.current_level = 0;
         
         //block stats
